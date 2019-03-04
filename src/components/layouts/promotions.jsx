@@ -1,12 +1,95 @@
 import React, {Component} from 'react';
+import {
+    Carousel,
+    CarouselItem,
+    CarouselControl,
+    CarouselIndicators,
+    CarouselCaption
+} from 'reactstrap';
+
+const items = [
+    {
+        src: 'http://www.gameranx.com/images/wallpapers/need-for-speed-hot-pursuit-wallpapers-hd/12884485361.jpg',
+        altText: 'Slide 1',
+        caption: 'Slide 1'
+    },
+    {
+        src: 'http://www.gameranx.com/images/wallpapers/need-for-speed-hot-pursuit/12884486372.jpg',
+        altText: 'Slide 2',
+        caption: 'Slide 2'
+    },
+    {
+        src: 'http://www.gameranx.com/images/wallpapers/need-for-speed-hot-pursuit/12884487043.jpg',
+        altText: 'Slide 3',
+        caption: 'Slide 3'
+    }
+];
 
 export default class extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {activeIndex: 0};
+        this.next = this.next.bind(this);
+        this.previous = this.previous.bind(this);
+        this.goToIndex = this.goToIndex.bind(this);
+        this.onExiting = this.onExiting.bind(this);
+        this.onExited = this.onExited.bind(this);
+    }
+
+    onExiting() {
+        this.animating = true;
+    }
+
+    onExited() {
+        this.animating = false;
+    }
+
+    next() {
+        if (this.animating) return;
+        const nextIndex = this.state.activeIndex === items.length - 1 ? 0 : this.state.activeIndex + 1;
+        this.setState({activeIndex: nextIndex});
+    }
+
+    previous() {
+        if (this.animating) return;
+        const nextIndex = this.state.activeIndex === 0 ? items.length - 1 : this.state.activeIndex - 1;
+        this.setState({activeIndex: nextIndex});
+    }
+
+    goToIndex(newIndex) {
+        if (this.animating) return;
+        this.setState({activeIndex: newIndex});
+    }
+
     render() {
-        return <div id="header" className="nav-bar">
-            <div className="card col-4">
-                <img className="card-img-top card-image"
-                     src="https://assets.bugatti.com/fileadmin/_processed_/sei/p2/se-image-84ffcc9863a222167b3c277741e64f68.jpg" alt="..." class="promo-image" />
+        const {activeIndex} = this.state;
+
+        const slides = items.map((item) => {
+            return (
+                <CarouselItem
+                    onExiting={this.onExiting}
+                    onExited={this.onExited}
+                    key={item.src}
+                >
+                    <img src={item.src} alt={item.altText}/>
+                    <CarouselCaption captionText={item.caption} captionHeader={item.caption}/>
+                </CarouselItem>
+            );
+        });
+
+        return (
+            <div>
+                <Carousel
+                          activeIndex={activeIndex}
+                          next={this.next}
+                          previous={this.previous}>
+                    <CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex}/>
+                    {slides}
+                    <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous}/>
+                    <CarouselControl direction="next" directionText="Next" onClickHandler={this.next}/>
+                </Carousel>
             </div>
-        </div>
+
+        );
     }
 }

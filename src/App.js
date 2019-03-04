@@ -1,40 +1,45 @@
 import React, {Component, Fragment} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {Header, Footer, Cart, SearchResults, Products, Orders} from './components/layouts'
-import {Home, NotFound, Register, Login} from './components/views'
+import {Home, NotFound, Register} from './components/views'
 import {connect} from 'react-redux'
 import './index.css'
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
-                <Router>
-                    <Fragment>
-                        <Header user={this.props.user} isLoggedIn={this.props.isLoggedIn} showMenu={this.props.showMenu} toggleMenu={this.props.toggleMenu}/>
+            <Router>
+                <div style={{ paddingLeft: '10%', paddingRight: '10%' }}>
+                    <Header
+                        loggIn={this.props.setLoggedIn}
+                        setUserEmail={this.props.setEmail}
+                        setUserPassword={this.props.setPassword}
+                        user={this.props.user}
+                        setUsername={this.props.setName}
+                        setToken={this.props.setToken}
+                    />
+                    <div className="" style={{ paddingLeft: '35%', paddingRight: '20%' }}>
                         <Switch>
-                            <Route path='/' exact component={Home} />
-                            <Route path='/cart' exact component={Cart} />
-                            <Route path='/results' exact component={SearchResults} />
-                            <Route path='/products' exact component={Products} />
-                            <Route path='/register' exact component={Register} />
-                            <Route path='/login' exact component={Login} />
-                            <Route path='/orders' exact component={Orders} />
-                            <Route component={NotFound} />
+                            <Route path='/' exact component={Home}/>
+                            <Route path='/cart' exact component={Cart}/>
+                            <Route path='/results' exact component={SearchResults}/>
+                            <Route path='/products' exact component={Products}/>
+                            <Route path='/register' exact component={Register}/>
+                            {/*<Route path='/login' exact component={Login}/>*/}
+                            <Route path='/orders' exact component={Orders}/>
+                            <Route component={NotFound}/>
                         </Switch>
-                        <Footer/>
-                    </Fragment>
-                </Router>
-            </div>
+                    </div>
+                    <Footer/>
+                </div>
+            </Router>
         );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        user: state.username,
-        isLoggedIn: state.isLoggedIn,
-        showMenu: state.showMenu
+        user: state.user,
     };
 };
 
@@ -42,14 +47,32 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setName: (name) => {
             dispatch({
-                type: "SET_NAME",
+                type: "SETNAME",
                 payload: name
             })
         },
-        toggleMenu: (menu) => {
+        setPassword: (password) => {
             dispatch({
-                type: "TOGGLE_MENU",
-                payload: menu
+                type: "SETPASSWORD",
+                payload: password
+            })
+        },
+        setEmail: (email) => {
+            dispatch({
+                type: "SETEMAIL",
+                payload: email
+            })
+        },
+        setToken: (token) => {
+            dispatch({
+                type: "SETTOKEN",
+                payload: token
+            })
+        },
+        setLoggedIn: (toggle) => {
+            dispatch({
+                type: "SETLOGGEDIN",
+                payload: toggle
             })
         },
     };

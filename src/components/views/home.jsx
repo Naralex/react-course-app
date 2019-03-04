@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Promotions} from '../layouts'
 
 //Lazy loading promotions
@@ -6,11 +6,9 @@ import {Promotions} from '../layouts'
 class Home extends Component {
     render() {
         return (
-            <div className='root'>
-                <main>
-                    <Promotions/>
-                </main>
-            </div>
+            <Fragment>
+                <Promotions/>
+            </Fragment>
         );
     }
 }

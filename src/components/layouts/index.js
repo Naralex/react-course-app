@@ -13,5 +13,5 @@ export {
     Cart,
     SearchResults,
     Products,
-    Orders
+    Orders,
 }

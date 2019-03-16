@@ -1,31 +1,31 @@
 import React, {Fragment, Component} from 'react';
 import AuthenticationService from '../../services/authentication-service'
 import {Button} from 'reactstrap';
+import connect from "react-redux/es/connect/connect";
 
-export class Login extends Component {
+class Login extends Component {
     static service = new AuthenticationService();
 
     handleSubmit = async (event) => {
         event.preventDefault();
-
         try {
             const {email, password} = this.props.user;
             const credentials = {email, password};
             const result = await Login.service.login(credentials);
-            this.props.setUsername(result.user.username);
+            this.props.setName(result.user.username);
+            this.props.setRole(result.user.roles.includes('Admin')?'Admin':'User');
             this.props.setToken(result.token);
-            this.props.loggIn(result.success);
-
+            this.props.setLoggedIn(result.success);
         } catch (e) {
             console.log(e);
         }
     };
 
     handleChange = ({target}) => {
-        if (target.name === 'email') {
-            this.props.setUserEmail(target.value);
-        }else {
-            this.props.setUserPassword(target.value);
+        switch (target.name) {
+            case 'email': this.props.setEmail(target.value); break;
+            case 'password': this.props.setPassword(target.value); break;
+            default: console.log('switch error');
         }
     };
 
@@ -68,5 +68,51 @@ export class Login extends Component {
         )
     }
 };
+const mapStateToProps = (state) => {
+    return {
+        user: state.userReducer.user,
+    };
+};
 
-export default Login;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setName: (name) => {
+            dispatch({
+                type: "SETNAME",
+                payload: name
+            })
+        },
+        setPassword: (password) => {
+            dispatch({
+                type: "SETPASSWORD",
+                payload: password
+            })
+        },
+        setEmail: (email) => {
+            dispatch({
+                type: "SETEMAIL",
+                payload: email
+            })
+        },
+        setToken: (token) => {
+            dispatch({
+                type: "SETTOKEN",
+                payload: token
+            })
+        },
+        setRole: (role) => {
+            dispatch({
+                type: "SETROLE",
+                payload: role
+            })
+        },
+        setLoggedIn: (toggle) => {
+            dispatch({
+                type: "SETLOGGEDIN",
+                payload: toggle
+            })
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

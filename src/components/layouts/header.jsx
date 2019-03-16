@@ -17,6 +17,17 @@ import {
 import Login from '../views/login'
 
 export default class extends Component {
+
+    handleSearch = async (event) => {
+        // event.preventDefault();
+        try {
+
+        }
+        catch (e) {
+            console.log(e);
+        }
+    };
+
     render() {
         return <header className="bg-primary">
             <Navbar light expand="md">
@@ -25,7 +36,11 @@ export default class extends Component {
                     <InputGroup className="mr-5">
                         <Input className="rounded" placeholder="Searching for part?"/>
                         <InputGroupAddon addonType="prepend">
-                            <Button className="bg-warning text-dark mb-1 rounded">Search</Button>
+                            <Button className="bg-warning text-dark mb-1 rounded"
+                            onClick={this.handleSearch}
+                            >
+                                Search
+                            </Button>
                         </InputGroupAddon>
                     </InputGroup>
                     <UncontrolledDropdown nav inNavbar>
@@ -35,7 +50,21 @@ export default class extends Component {
                                     {this.props.user.username}
                                 </DropdownToggle>
                                 <DropdownMenu right>
-                                    <DropdownItem tag={Link} to="/orders">My Orders</DropdownItem>
+                                    {this.props.user.role === 'Admin'
+                                        ?<Fragment>
+                                            <DropdownItem tag={Link} to="/add">
+                                                Add product
+                                            </DropdownItem>
+                                            {/*<DropdownItem tag={Link} to="/orders">*/}
+                                                {/*My Orders*/}
+                                            {/*</DropdownItem>*/}
+                                        </Fragment>
+                                        :<Fragment>
+                                            <DropdownItem tag={Link} to="/orders">
+                                                My Orders
+                                            </DropdownItem>
+                                        </Fragment>
+                                    }
                                     <DropdownItem divider/>
                                     <DropdownItem href='/'>
                                         Logout
@@ -48,15 +77,16 @@ export default class extends Component {
                                 </DropdownToggle>
                                 <DropdownMenu>
                                     <Login
-                                        user={this.props.user}
-                                        loggIn={this.props.loggIn}
-                                        setUserEmail={this.props.setUserEmail}
-                                        setUserPassword={this.props.setUserPassword}
-                                        setUsername={this.props.setUsername}
-                                        setToken={this.props.setToken}
+                                        // user={this.props.user}
+                                        // loggIn={this.props.loggIn}
+                                        // setUserEmail={this.props.setUserEmail}
+                                        // setUserPassword={this.props.setUserPassword}
+                                        // setUsername={this.props.setUsername}
+                                        // setToken={this.props.setToken}
+                                        // setRole={this.props.setRole}
                                     />
                                     <DropdownItem divider/>
-                                    <DropdownItem href='/register'>
+                                    <DropdownItem tag={Link} to="/register">
                                         Register
                                     </DropdownItem>
                                 </DropdownMenu>

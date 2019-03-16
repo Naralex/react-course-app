@@ -5,12 +5,13 @@ import {createStore, combineReducers} from 'redux'
 import {Provider} from 'react-redux'
 import 'bootstrap/dist/css/bootstrap.css';
 
-const initialState = {
+const userReducer = (state = {
     user: {
         username: '',
         email: '',
         password: '',
         token: '',
+        role: '',
         isLoggedIn: false
     },
     basket: {
@@ -20,9 +21,7 @@ const initialState = {
     },
     catalogItems: {},
     errors: []
-};
-
-const userReducer = (state = initialState, action) => {
+}, action) => {
     switch (action.type) {
         case 'SETNAME':
             state = {
@@ -69,25 +68,74 @@ const userReducer = (state = initialState, action) => {
                 }
             };
             break;
+        case 'SETROLE':
+            state = {
+                ...state,
+                user: {
+                    ...state.user,
+                    role: action.payload
+                }
+            };
+            break;
     }
     return state
 };
 
-// const basketReducer = (state = initialState, action) => {
-//     switch (action.type) {
-//         case 'TOGGLE_MENU':
-//             state = {
-//                 ...state,
-//                 layout: {
-//                     showMenu: (state.layout.showMenu ? false : true)
-//                 }
-//             };
-//             break;
-//     }
-//     return state
-// };
+const newProductReducer = (state = {
+                               productName: '',
+                               manufacturer: '',
+                               description: '',
+                               imageLink: '',
+                               retailPrice: '',
+                               wholesalePrice: ''
+                           }
+    , action) => {
+    switch (action.type) {
+        case 'SETPRODUCTNAME':
+            state = {
+                ...state,
+                productName: action.payload,
+            };
+            break;
+        case 'SETMANUFACTURER':
+            state = {
+                ...state,
+                manufacturer: action.payload,
 
-const store = createStore(userReducer, initialState,
+            };
+            break;
+        case 'SETDESCTIPRTION':
+            state = {
+                ...state,
+                description: action.payload,
+
+            };
+            break;
+        case 'SETIMAGELINK':
+            state = {
+                ...state,
+                imageLink: action.payload,
+            };
+            break;
+        case 'SETWHOLESALEPRICE':
+            state = {
+                ...state,
+                retailPrice: action.payload,
+
+            };
+            break;
+        case 'SETRETAILPRICE':
+            state = {
+                ...state,
+                wholesalePrice: action.payload,
+
+            };
+            break;
+    }
+    return state
+};
+
+const store = createStore(combineReducers({userReducer, newProductReducer}),
     window.__REDUX_DEVTOOLS_EXTENSION__ &&
     window.__REDUX_DEVTOOLS_EXTENSION__());
 
